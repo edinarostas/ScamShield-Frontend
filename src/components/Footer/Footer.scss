@@ -1,0 +1,21 @@
+@use "../../styles/partials/breakpoints" as *;
+
+.footer {
+    background-color: lightyellow;
+
+    &__wrapper {
+        padding: 2.5rem 0;
+
+        @include desktop {
+            padding: 3rem 0;
+        }
+    }
+
+    &__copyright {
+        font-size: inherit;
+        display: block;
+        width: min-content;
+        margin-inline: auto;
+        white-space: nowrap;
+    }
+}
