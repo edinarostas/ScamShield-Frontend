@@ -8,7 +8,7 @@ const Footer = () => {
             <div className="footer__wrapper">
                 <p className="footer__content">
                     <small className="footer__copyright">
-                        &copy; ScamShield Inc. All Rights Reserved.
+                        &copy; ScamShield, All Rights Reserved.
                     </small>
                 </p>
             </div>

@@ -1,7 +1,8 @@
 @use "../../styles/partials/breakpoints" as *;
+@use "../../styles/partials/variables" as *;
 
 .footer {
-    background-color: lightyellow;
+    background-color: $secondary-color;
 
     &__wrapper {
         padding: 2.5rem 0;

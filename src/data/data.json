@@ -1,0 +1,44 @@
+[
+    {
+        "id": 1,
+        "photo": "/assets/images/clothes-pile.jpg",
+        "title": "Knit bundle",
+        "price": 80,
+        "username": "FashionGuru"
+    },
+    {
+        "id": 2,
+        "photo": "../assets/images/clothes-pile.jpg",
+        "title": "Designer Jeans",
+        "price": 60,
+        "username": "StyleIcon"
+    },
+    {
+        "id": 3,
+        "photo": "../assets/images/clothes-pile.jpg",
+        "title": "Vintage Dress",
+        "price": 45,
+        "username": "RetroChic"
+    },
+    {
+        "id": 4,
+        "photo": "../assets/images/clothes-pile.jpg",
+        "title": "Woolen Scarf",
+        "price": 25,
+        "username": "CozyWear"
+    },
+    {
+        "id": 5,
+        "photo": "../assets/images/clothes-pile.jpg",
+        "title": "Sneakers",
+        "price": 70,
+        "username": "SneakerHead"
+    },
+    {
+        "id": 6,
+        "photo": "../assets/images/clothes-pile.jpg",
+        "title": "Graphic T-Shirt",
+        "price": 20,
+        "username": "CasualVibes"
+    }
+]

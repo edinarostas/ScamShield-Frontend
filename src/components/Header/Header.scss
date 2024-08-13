@@ -1,0 +1,66 @@
+@use "../../styles/partials/variables" as *;
+@use "../../styles/partials/breakpoints" as *;
+
+.header {
+    margin: 0;
+    background: $primary-color;
+
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    &__wrapper {
+        margin-inline: auto;
+        padding: 1rem 0;
+
+        @include tablet {
+            max-width: 1020px;
+            width: 92%;
+            margin: 0 auto;
+        }
+
+        @include desktop {
+            width: 1020px;
+        }
+    }
+
+    &__nav {
+        display: flex;
+        flex-flow: wrap column;
+        gap: 1.5rem 0;
+        align-items: center;
+
+        @include tablet {
+            flex-flow: wrap row;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+
+    &__logo {
+        display: block;
+        color: $secondary-color;
+        text-decoration: none;
+    }
+
+    &__list-item {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    &__link {
+        color: $secondary-color;
+        text-decoration: none;
+        padding-block: 0.5rem;
+        padding-inline: 1rem;
+        border-radius: 1.25rem;
+
+        &:hover {
+            background-color: $secondary-color;
+            color: $white-color;
+        }
+    }
+}
