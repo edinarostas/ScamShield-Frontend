@@ -5,8 +5,8 @@
     flex: 1 1 calc(33.333% - 32px);
     margin: 2rem;
     border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 16px;
+    border-radius: 1rem;
+    padding: 2rem;
     max-width: 250px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     display: flex;
@@ -16,8 +16,9 @@
 
     &__image {
         width: 100%;
-        border-radius: 8px;
+        border-radius: 0.5rem;
         object-fit: cover;
+        border: 1.5px solid #ddd;
     }
 
     &__details {
@@ -36,7 +37,6 @@
         margin: 0;
         font-size: 16px;
         color: $secondary-color;
-
     }
 
     &__username {
