@@ -8,6 +8,7 @@ const Home = () => {
     const handleMessage = () => {
         alert('Message button clicked!');
     };
+
     return (
         <section className='adverts'>
             {AdvertData.map((advert) => (
