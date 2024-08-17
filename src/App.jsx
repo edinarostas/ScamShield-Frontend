@@ -6,31 +6,36 @@ import Admin from './pages/Admin/Admin';
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import Authentication from './components/Authentication/Authentication';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import useToken from './utils/useToken';
 import './App.scss'
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { setToken, clearToken } = useToken();
+  const token = localStorage.getItem("token");
 
-  const handleSuccessfulLogin = () => {
-    setIsLoggedIn(true);
+  const handleLogout = () => {
+    clearToken();
+    navigate('/');
   };
 
+  if (!token) {
+    return <Authentication setToken={setToken} />
+  }
+
   return (
-
-    <BrowserRouter>
-      {isLoggedIn && <Header />}
-
+    <div>
+      {token && <Header handleLogout={handleLogout} />}
       <Routes>
-        <Route path="/" element={isLoggedIn ? <Home /> : <Authentication onLoginSuccess={handleSuccessfulLogin} />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/messaging" element={<Messaging />} />
+        <Route path="/" element={<Authentication setToken={setToken} />} />
+        <Route path="/home" element={<ProtectedRoute token={token}><Home /></ProtectedRoute>} />
+        <Route path="/messaging" element={<ProtectedRoute token={token}><Messaging /></ProtectedRoute>} />
+        <Route path="/admin" element={<ProtectedRoute token={token}><Admin /></ProtectedRoute>} />
         <Route path="/logout" element={<h1>Log out</h1>} />
-        <Route path="/admin" element={<Admin />} />
       </Routes>
-
-      {isLoggedIn && <Footer />}
-    </BrowserRouter>
-  );
+      {token && <Footer />}
+    </div>
+  )
 }
 
 export default App;

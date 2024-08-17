@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const Authentication = ({ isSignUp, onLoginSuccess }) => {
+const Authentication = ({ setToken }) => {
+    const [isSignUp, setIsSignUp] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -12,18 +16,14 @@ const Authentication = ({ isSignUp, onLoginSuccess }) => {
                 alert('Passwords do not match!');
                 return;
             }
-            const { username, password } = event.target.value;
-            console.log('Signing up:', { username, password });
             try {
                 const response = await axios.post("http://localhost:8080/signup", {
                     username,
                     password
                 });
-                sessionStorage.setItem("authToken", response.data.token);
-                setIsLoggedIn(true);
-                console.log("got a successful response from the server and got the token")
+                setToken({ token: response.data.accessToken, userId: response.data.userId });
             } catch (error) {
-                console.log("Error happened while signing up: ", error)
+                console.log("Error happened while signing up: ", error);
             }
         } else {
             try {
@@ -31,14 +31,11 @@ const Authentication = ({ isSignUp, onLoginSuccess }) => {
                     username,
                     password
                 });
-                sessionStorage.setItem("authToken", response.data.token);
-                console.log('Logging in:', { username, password });
-                onLoginSuccess(); // Call this function after successful login
-                console.log("Login successful");
+                setToken({ token: response.data.accessToken, userId: response.data.userId });
+                navigate('/home');
             } catch (error) {
                 console.log("Error happened while logging in: ", error);
             }
-            console.log('Logging in:', { username, password });
         }
     };
 
@@ -79,6 +76,12 @@ const Authentication = ({ isSignUp, onLoginSuccess }) => {
                 )}
                 <button type="submit">{isSignUp ? 'Sign Up' : 'Login'}</button>
             </form>
+            <p>
+                {isSignUp ? 'Already have an account?' : 'Need an account?'}
+            </p>
+            <button onClick={() => setIsSignUp(!isSignUp)}>
+                {isSignUp ? 'Log in' : 'Sign up'}
+            </button>
         </div>
     );
 };

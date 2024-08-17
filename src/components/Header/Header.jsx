@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import './Header.scss'
 
 
-const Header = () => {
+const Header = ({ handleLogout }) => {
     return (
         <header className="header">
             <div className="header__wrapper">
@@ -19,9 +19,9 @@ const Header = () => {
                             <Link className="header__link" to="/messaging">
                                 Messaging
                             </Link>
-                            <Link className="header__link" to="/logout">
+                            <button className="header__link" onClick={handleLogout}>
                                 Logout
-                            </Link>
+                            </button>
                         </li>
                     </ul>
                 </nav>

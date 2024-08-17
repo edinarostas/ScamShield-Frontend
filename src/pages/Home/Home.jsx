@@ -1,28 +1,57 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AdvertCard from '../../components/AdvertCard/AdvertCard';
-import './Home.scss'
-import AdvertData from '../../data/data.json'
-
+import axios from 'axios';
+import './Home.scss';
 
 const Home = () => {
+    const [adverts, setAdverts] = useState([]);
+
+    useEffect(() => {
+        fetchAdverts();
+    }, []);
+
+    const fetchAdverts = async () => {
+        const token = localStorage.getItem("token");
+        const userId = localStorage.getItem("userId");
+
+        if (!token || !userId) {
+            return false;
+        }
+
+        try {
+            const response = await axios.get(`http://localhost:8080/adverts/${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${token.replaceAll('"', '')}`,
+                },
+            });
+            setAdverts(response.data.adverts);
+        } catch (error) {
+            console.log("Error happened while fetching adverts: ", error);
+        }
+    };
+
     const handleMessage = () => {
         alert('Message button clicked!');
     };
 
     return (
         <section className='adverts'>
-            {AdvertData.map((advert) => (
-                <AdvertCard
-                    key={advert.id}
-                    photo={advert.photo}
-                    title={advert.title}
-                    price={advert.price}
-                    username={advert.username}
-                    onMessage={handleMessage}
-                />
-            ))}
+            {adverts.length > 0 ? (
+                adverts.map((advert) => (
+                    <AdvertCard
+                        key={advert.id}
+                        photo={advert.photo}
+                        title={advert.title}
+                        price={advert.price}
+                        username={advert.username}
+                        onMessage={handleMessage}
+                    />
+                ))
+            ) : (
+                <p>No adverts available.</p>
+            )}
         </section>
-    )
-}
+    );
+};
 
-export default Home; 
+export default Home;
