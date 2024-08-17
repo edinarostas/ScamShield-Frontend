@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useNavigate, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home/Home'
 import Messaging from './pages/Messaging/Messaging';
 import Admin from './pages/Admin/Admin';
@@ -12,7 +12,8 @@ import './App.scss'
 
 const App = () => {
   const { setToken, clearToken } = useToken();
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     clearToken();

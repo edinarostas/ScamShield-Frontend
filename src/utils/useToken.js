@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 export default function useToken() {
     const getToken = () => {
-        const tokenString = localStorage.getItem('token');
+        const tokenString = sessionStorage.getItem('token');
         if (tokenString === "undefined") {
             console.log("Token is undefined")
         }
@@ -11,7 +11,7 @@ export default function useToken() {
     };
 
     const getUserId = () => {
-        const userIdString = localStorage.getItem('userId');
+        const userIdString = sessionStorage.getItem('userId');
         return userIdString ? JSON.parse(userIdString) : null;
     };
 
@@ -19,14 +19,14 @@ export default function useToken() {
     const [userId, setUserId] = useState(getUserId());
 
     const saveToken = (userToken) => {
-        localStorage.setItem('token', JSON.stringify(userToken.token));
-        localStorage.setItem('userId', JSON.stringify(userToken.userId));
+        sessionStorage.setItem('token', JSON.stringify(userToken.token));
+        sessionStorage.setItem('userId', JSON.stringify(userToken.userId));
         setToken(userToken.token);
         setUserId(userToken.userId);
     };
 
     const clearToken = () => {
-        localStorage.removeItem('token');
+        sessionStorage.removeItem('token');
         setToken(null);
     };
 
