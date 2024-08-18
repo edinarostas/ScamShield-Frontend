@@ -1,13 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Messaging.scss';
+import MessageHistoryCard from '../../components/MessageHistoryCard/MessageHistoryCard'
+import ChatBox from '../../components/ChatBox/ChatBox'
 
 const Messaging = () => {
     const [adverts, setAdverts] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [selectedConversation, setSelectedConversation] = useState(null);
+    const [loggedInUsername, setLoggedInUsername] = useState('');
     const [selectedAdvert, setSelectedAdvert] = useState(null);
 
+    useEffect(() => {
+        const fetchUsername = async () => {
+            const token = sessionStorage.getItem("token");
+            if (token) {
+                try {
+                    const response = await axios.get('http://localhost:8080/username', {
+                        headers: { Authorization: `Bearer ${token.replaceAll('"', '')}` }
+                    });
+                    setLoggedInUsername(response.data.username);
+                } catch (error) {
+                    console.error('Error fetching user info:', error);
+                }
+            }
+        };
+
+        fetchUsername();
+    }, []);
 
     useEffect(() => {
         const fetchConversationsAndAdverts = async () => {
@@ -34,7 +54,6 @@ const Messaging = () => {
         fetchConversationsAndAdverts();
     }, []);
 
-    // Handle conversation click to show messages
     const handleConversationClick = (advert, conversation) => {
         setSelectedAdvert(advert);
         setSelectedConversation(conversation);
@@ -89,53 +108,44 @@ const Messaging = () => {
     };
 
     return (
-        <section>
-            <h1>Messaging user: {sessionStorage.getItem("userId")}</h1>
-            <div className="advert-list">
-                {adverts.map(advert => (
-                    <div key={advert.advertId} className="advert-item">
-                        <h2>{advert.advertTitle}</h2>
-                        {/* <img src={advert.advertPhoto} alt={advert.advertTitle} /> */}
-                        <p>Price: ${advert.advertPrice}</p>
-                        <div className="conversation-list">
-                            {advert.conversations.map(conversation => (
-                                <div
-                                    key={conversation.conversationId}
-                                    className={`conversation-item ${selectedConversation?.conversationId === conversation.conversationId ? 'selected' : ''}`}
-                                    onClick={() => handleConversationClick(advert, conversation)}
-                                >
-                                    <h5>Conversation with {conversation.messages[0].sender}</h5>
-                                    <p>
-                                        {conversation.messages[conversation.messages.length - 1].sender}: {conversation.messages[conversation.messages.length - 1].message}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                ))}
-            </div>
-            {selectedConversation && selectedAdvert && (
-                <>
-                    <div className="message-list">
-                        {selectedConversation.messages.map(message => (
-                            <div
-                                key={message.messageId}
-                                className={`message-item ${message.sender === 'YourUsername' ? 'sent' : 'received'}`}
-                            >
-                                <span>{message.sender}: </span>{message.message}
-                            </div>
-                        ))}
-                    </div>
-                    <div className="reply-section">
-                        <textarea
-                            value={newMessage}
-                            onChange={handleInputChange}
-                            placeholder="Type your reply..."
+        <section className="messaging-page">
+            <h1>{loggedInUsername}'s messages</h1>
+            <div className="messaging-page__messaging">
+                <section className="message-history">
+                    {adverts.map(advert => (
+                        advert.conversations.map(conversation => (
+                            <MessageHistoryCard
+                                key={conversation.id}
+                                advertPhoto={advert.advertPhoto}
+                                advertTitle={advert.advertTitle}
+                                posterUsername={advert.username}
+                                if
+                                lastMessageSender={conversation.messages[conversation.messages.length - 1].sender === loggedInUsername ? 'You' : conversation.messages[conversation.messages.length - 1].sender}
+                                lastMessage={conversation.messages[conversation.messages.length - 1].message}
+                                onClick={() => handleConversationClick(advert, conversation)}
+                            />
+                        ))
+                    ))}
+                </section>
+                {selectedConversation && selectedAdvert && (
+                    <section className="current-conversation">
+                        <ChatBox
+                            childKey={selectedAdvert.advertId}
+                            messages={selectedConversation.messages}
+                            loggedInUsername={loggedInUsername}
                         />
-                        <button onClick={handleSendMessage}>Send</button>
-                    </div>
-                </>
-            )}
+                        <div className="reply-section">
+                            <textarea
+                                value={newMessage}
+                                onChange={handleInputChange}
+                                placeholder="Type your reply..."
+                            />
+                            <button onClick={handleSendMessage}>Send</button>
+                        </div>
+                    </section>
+                )}
+
+            </div>
         </section>
     );
 };

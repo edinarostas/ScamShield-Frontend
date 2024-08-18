@@ -3,14 +3,13 @@
 
 .footer {
     background-color: $secondary-color;
-
-    &__wrapper {
-        padding: 2.5rem 0;
-
-        @include desktop {
-            padding: 3rem 0;
-        }
-    }
+    left: 0;
+    bottom: 0;
+    height: 7rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     &__copyright {
         font-size: inherit;
