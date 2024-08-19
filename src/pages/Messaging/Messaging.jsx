@@ -52,7 +52,7 @@ const Messaging = () => {
         };
 
         fetchConversationsAndAdverts();
-    }, []);
+    }, [adverts]);
 
     const handleConversationClick = (advert, conversation) => {
         setSelectedAdvert(advert);
@@ -144,7 +144,6 @@ const Messaging = () => {
                         </div>
                     </section>
                 )}
-
             </div>
         </section>
     );

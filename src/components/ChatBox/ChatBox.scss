@@ -1,3 +1,5 @@
+@use "../../styles/partials/variables" as *;
+
 .chat-box {
     display: flex;
     flex-direction: column;
@@ -7,7 +9,7 @@
     max-height: 400px;
     overflow-y: auto;
 
-    .message-wrap {
+    .message {
         display: flex;
         flex-direction: column;
         margin-bottom: 10px;
@@ -16,11 +18,11 @@
             margin-bottom: 0;
         }
 
-        .message-sender {
+        &__sender {
             font-size: 0.85rem;
             font-weight: bold;
             margin-bottom: 2px;
-            color: #333;
+            color: $dark-grey;
 
             &--left {
                 align-self: flex-start;
@@ -31,7 +33,7 @@
             }
         }
 
-        .message-bubble {
+        &__bubble {
             max-width: 70%;
             padding: 10px;
             border-radius: 12px;
@@ -40,20 +42,44 @@
 
             &--left {
                 align-self: flex-start;
-                background-color: #e0e0e0;
+                background-color: $message-bubble-left;
                 border-top-left-radius: 0;
             }
 
             &--right {
                 align-self: flex-end;
-                background-color: #4a90e2;
+                background-color: $message-bubble-rigt;
                 color: #fff;
                 border-top-right-radius: 0;
             }
         }
 
-        .message-content {
+        &__content {
             margin: 0;
+        }
+
+
+        .scam-alert {
+            display: flex;
+            align-items: center;
+            color: red;
+            background-color: $light-yellow;
+            border: 1px solid #ff4d4d;
+            border-radius: 8px;
+            padding: 4px 8px;
+            margin-top: 8px;
+
+            &__icon {
+                height: 30px;
+                width: 30px;
+                margin-right: 8px;
+                margin-right: 10px;
+            }
+
+            span {
+                font-size: 14px;
+                line-height: 1.4;
+            }
         }
     }
 }
