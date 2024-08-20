@@ -26,17 +26,26 @@ const App = () => {
 
   return (
     <div>
-      {token && <Header handleLogout={handleLogout} />}
-      <Routes>
-        <Route path="/" element={<Authentication setToken={setToken} />} />
-        <Route path="/home" element={<ProtectedRoute token={token}><Home /></ProtectedRoute>} />
-        <Route path="/messaging" element={<ProtectedRoute token={token}><Messaging /></ProtectedRoute>} />
-        <Route path="/admin" element={<ProtectedRoute token={token}><Admin /></ProtectedRoute>} />
-        <Route path="/logout" element={<h1>Log out</h1>} />
-      </Routes>
-      {token && <Footer />}
+      {token ? (
+        <>
+          <Header handleLogout={handleLogout} />
+          <Routes>
+            <Route path="/" element={<ProtectedRoute token={token}><Home /></ProtectedRoute>} />
+            <Route path="/home" element={<ProtectedRoute token={token}><Home /></ProtectedRoute>} />
+            <Route path="/messaging" element={<ProtectedRoute token={token}><Messaging /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute token={token}><Admin /></ProtectedRoute>} />
+            <Route path="/logout" element={<h1>Log out</h1>} />
+          </Routes>
+          <Footer />
+        </>
+      ) : (
+        <Routes>
+          <Route path="/" element={<Authentication setToken={setToken} />} />
+          <Route path="*" element={<Authentication setToken={setToken} />} />
+        </Routes>
+      )}
     </div>
-  )
-}
+  );
+};
 
 export default App;

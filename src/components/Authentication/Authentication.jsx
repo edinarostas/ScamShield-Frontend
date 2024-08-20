@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './Authentication.scss';
 
 const Authentication = ({ setToken }) => {
     const [isSignUp, setIsSignUp] = useState(false);
@@ -40,48 +41,66 @@ const Authentication = ({ setToken }) => {
     };
 
     return (
-        <div>
-            <h2>{isSignUp ? 'Sign Up' : 'Login'}</h2>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Username
-                </label>
-                <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                />
-                <label>
-                    Password
-                </label>
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-                {isSignUp && (
-                    <>
-                        <label>
-                            Confirm Password
+        <div className="auth">
+            <div className="auth__left">
+                <div className="auth__text">
+                    <h2 className="auth__title">ScamShield</h2>
+                    <h1 className="auth__heading">Protect your users from scam messages instantly</h1>
+                    <p className="auth__description">
+                        Use ScamShield and secure your messages with real-time scam detection. Sign up now and protect your personal information with ease.
+                    </p>
+                    <div className="auth__buttons">
+                        <button className="auth__button" onClick={() => setIsSignUp(false)}>Log In</button>
+                        <button className="auth__button" onClick={() => setIsSignUp(true)}>Sign Up</button>
+                    </div>
+                </div>
+            </div>
+            <div className="auth__right">
+                <div className="auth__form-container">
+                    <h2 className="auth__form-title">{isSignUp ? 'Sign Up' : 'Log In'}</h2>
+                    <form className="auth__form" onSubmit={handleSubmit}>
+                        <label className="auth__label">
+                            Username
+                            <input
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                className="auth__input"
+                                required
+                            />
                         </label>
-                        <input
-                            type="password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            required
-                        />
-                    </>
-                )}
-                <button type="submit">{isSignUp ? 'Sign Up' : 'Login'}</button>
-            </form>
-            <p>
-                {isSignUp ? 'Already have an account?' : 'Need an account?'}
-            </p>
-            <button onClick={() => setIsSignUp(!isSignUp)}>
-                {isSignUp ? 'Log in' : 'Sign up'}
-            </button>
+                        <label className="auth__label">
+                            Password
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="auth__input"
+                                required
+                            />
+                        </label>
+                        {isSignUp && (
+                            <label className="auth__label">
+                                Confirm Password
+                                <input
+                                    type="password"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    className="auth__input"
+                                    required
+                                />
+                            </label>
+                        )}
+                        <button type="submit" className="auth__submit-button">{isSignUp ? 'Sign Up' : 'Log In'}</button>
+                    </form>
+                    <p className="auth__toggle-text">
+                        {isSignUp ? 'Already have an account?' : 'Need an account?'}
+                    </p>
+                    <button className="auth__toggle-button" onClick={() => setIsSignUp(!isSignUp)}>
+                        {isSignUp ? 'Log in' : 'Sign up'}
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };

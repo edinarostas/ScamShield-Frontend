@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import AdvertCard from '../../components/AdvertCard/AdvertCard';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import AdvertCard from '../../components/AdvertCard/AdvertCard';
 import './Home.scss';
 
 const Home = () => {
     const [adverts, setAdverts] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchAdverts();
@@ -30,8 +32,8 @@ const Home = () => {
         }
     };
 
-    const handleMessage = () => {
-        alert('Message button clicked!');
+    const handleSendNewMessage = (advertId) => {
+        navigate(`/messaging?advertId=${advertId}`);
     };
 
     return (
@@ -44,7 +46,7 @@ const Home = () => {
                         title={advert.title}
                         price={advert.price}
                         username={advert.username}
-                        onMessage={handleMessage}
+                        onMessage={() => handleSendNewMessage(advert.id)}
                     />
                 ))
             ) : (

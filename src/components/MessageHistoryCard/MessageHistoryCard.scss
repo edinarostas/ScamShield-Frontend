@@ -9,8 +9,14 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.message-history-card.selected {
+    background-color: #e0f7fa;
+    border-color: #00acc1;
+}
+
 .advert-details {
     display: flex;
+    gap: 0.5rem;
     align-items: center;
     margin-bottom: 10px;
 }
@@ -40,7 +46,7 @@
 
 
 .message-details {
-    padding-left: 1rem;
+    padding-left: 5.2rem;
 
     .message-detail {
         padding-left: 1rem;

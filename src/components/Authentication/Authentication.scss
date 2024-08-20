@@ -1,0 +1,136 @@
+@use "../../styles/partials/variables" as *;
+
+.auth {
+    display: flex;
+    height: 100vh;
+
+    &__left {
+        flex: 1;
+        flex-direction: column;
+        background-color: $primary-color;
+        color: $white-color;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .auth__text {
+            color: $white-color;
+            padding: 4rem;
+            letter-spacing: 0.1rem;
+
+            .auth__title {
+                color: $secondary-color;
+                margin-bottom: 7rem;
+            }
+
+            .auth__heading {
+                margin-bottom: 1rem;
+                font-size: 2rem;
+                letter-spacing: 0.3rem;
+                font-weight: 500;
+            }
+
+            .auth__description {
+                margin-bottom: 5rem;
+                font-size: 1rem;
+                font-weight: 300;
+                letter-spacing: 0.1rem;
+            }
+
+            .auth__buttons {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+
+                .auth__button {
+                    background-color: $secondary-color;
+                    color: $white-color;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-size: 1rem;
+
+                    &:hover {
+                        background-color: $secondary-color;
+                        color: $white-color;
+                    }
+                }
+            }
+        }
+    }
+
+    &__right {
+        flex: 1;
+        background-image: url('../../assets/images/home-page-photo.jpg');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .auth__form-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+
+
+            .auth__form-title {
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            .auth__form {
+                display: flex;
+                flex-direction: column;
+
+                .auth__label {
+                    display: flex;
+                    flex-direction: column;
+                    margin-bottom: 15px;
+
+                    .auth__input {
+                        padding: 10px;
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                        margin-top: 5px;
+                    }
+                }
+
+                .auth__submit-button {
+                    background-color: $primary-color;
+                    color: $white-color;
+                    border: none;
+                    padding: 10px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-size: 1rem;
+                    margin-top: 10px;
+                    width: 100%;
+                }
+            }
+
+            .auth__toggle-text {
+                text-align: center;
+                margin-top: 20px;
+            }
+
+            .auth__toggle-button {
+                background-color: $secondary-color;
+                color: $primary-color;
+                border: none;
+                padding: 10px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 1rem;
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+    }
+}

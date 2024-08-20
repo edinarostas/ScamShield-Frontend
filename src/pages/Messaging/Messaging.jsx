@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { v7 as uuidv7 } from 'uuid';
 import './Messaging.scss';
-import MessageHistoryCard from '../../components/MessageHistoryCard/MessageHistoryCard'
-import ChatBox from '../../components/ChatBox/ChatBox'
+import MessageHistoryCard from '../../components/MessageHistoryCard/MessageHistoryCard';
+import ChatBox from '../../components/ChatBox/ChatBox';
 
 const Messaging = () => {
     const [adverts, setAdverts] = useState([]);
@@ -10,6 +12,7 @@ const Messaging = () => {
     const [selectedConversation, setSelectedConversation] = useState(null);
     const [loggedInUsername, setLoggedInUsername] = useState('');
     const [selectedAdvert, setSelectedAdvert] = useState(null);
+    const location = useLocation();
 
     useEffect(() => {
         const fetchUsername = async () => {
@@ -44,15 +47,55 @@ const Messaging = () => {
                         Authorization: `Bearer ${token.replaceAll('"', '')}`,
                     },
                 });
-                setAdverts(response.data.adverts);
+                const fetchedAdverts = response.data.adverts;
+                setAdverts(fetchedAdverts);
 
+                const queryParams = new URLSearchParams(location.search);
+                const advertId = queryParams.get('advertId');
+
+                if (advertId) {
+                    let foundAdvert = fetchedAdverts.find(advert => advert.advertId === advertId);
+
+                    if (!foundAdvert) {
+                        try {
+                            const advertData = await axios.get(`http://localhost:8080/advert/${advertId}`, {
+                                headers: {
+                                    Authorization: `Bearer ${token.replaceAll('"', '')}`,
+                                },
+                            });
+
+                            foundAdvert = {
+                                advertId: advertData.data.advert.id,
+                                advertTitle: advertData.data.advert.title,
+                                advertPhoto: advertData.data.advert.photo,
+                                advertPrice: advertData.data.advert.price,
+                                username: advertData.data.advert.username,
+                                conversations: []
+                            };
+
+                            setAdverts(prevAdverts => [...prevAdverts, foundAdvert]);
+                        } catch (error) {
+                            console.log("Error fetching advert: ", error);
+                        }
+                    }
+
+                    if (foundAdvert && foundAdvert.conversations.length > 0) {
+                        setSelectedAdvert(foundAdvert);
+                        setSelectedConversation(foundAdvert.conversations[0]);
+                    } else if (foundAdvert) {
+                        const newConversation = { conversationId: uuidv7(), messages: [] };
+                        foundAdvert.conversations.push(newConversation);
+                        setSelectedAdvert(foundAdvert);
+                        setSelectedConversation(newConversation);
+                    }
+                }
             } catch (error) {
                 console.log("Error fetching conversations and adverts: ", error);
             }
         };
 
         fetchConversationsAndAdverts();
-    }, [adverts]);
+    }, [location.search]);
 
     const handleConversationClick = (advert, conversation) => {
         setSelectedAdvert(advert);
@@ -64,12 +107,20 @@ const Messaging = () => {
     };
 
     const handleSendMessage = async () => {
-        if (newMessage.trim() && selectedConversation && selectedAdvert) {
+        if (!newMessage.trim()) return;
+
+        if (selectedConversation && selectedAdvert) {
             const token = sessionStorage.getItem("token");
             const userId = sessionStorage.getItem("userId");
 
             const newMessageObj = {
+                id: uuidv7(),
+                advert_id: selectedAdvert.advertId,
+                conversation_id: selectedConversation.conversationId,
+                timestamp: new Date().toISOString(),
+                sender: loggedInUsername,
                 message: newMessage,
+                scamAlert: false
             };
 
             try {
@@ -81,12 +132,10 @@ const Messaging = () => {
 
                 const updatedConversation = {
                     ...selectedConversation,
-                    messages: [...selectedConversation.messages, {
-                        id: selectedConversation.messages.length + 1,
-                        timestamp: new Date().toISOString(),
-                        sender: userId,
-                        message: newMessage,
-                    }]
+                    messages: [
+                        ...selectedConversation.messages,
+                        newMessageObj
+                    ]
                 };
 
                 setAdverts(adverts.map(advert =>
@@ -113,24 +162,40 @@ const Messaging = () => {
             <div className="messaging-page__messaging">
                 <section className="message-history">
                     {adverts.map(advert => (
-                        advert.conversations.map(conversation => (
-                            <MessageHistoryCard
-                                key={conversation.id}
-                                advertPhoto={advert.advertPhoto}
-                                advertTitle={advert.advertTitle}
-                                posterUsername={advert.username}
-                                if
-                                lastMessageSender={conversation.messages[conversation.messages.length - 1].sender === loggedInUsername ? 'You' : conversation.messages[conversation.messages.length - 1].sender}
-                                lastMessage={conversation.messages[conversation.messages.length - 1].message}
-                                onClick={() => handleConversationClick(advert, conversation)}
-                            />
-                        ))
+                        <div key={advert.advertId}>
+                            {advert.conversations.length > 0 ? (
+                                advert.conversations
+                                    .sort((a, b) => new Date(b.messages[b.messages.length - 1]?.timestamp || 0) - new Date(a.messages[a.messages.length - 1]?.timestamp || 0))
+                                    .map(conversation => (
+                                        <MessageHistoryCard
+                                            key={conversation.conversationId}
+                                            advertPhoto={advert.advertPhoto}
+                                            advertTitle={advert.advertTitle}
+                                            posterUsername={advert.username}
+                                            lastMessageSender={conversation.messages[conversation.messages.length - 1]?.sender === loggedInUsername ? 'You' : conversation.messages[conversation.messages.length - 1]?.sender}
+                                            lastMessage={conversation.messages[conversation.messages.length - 1]?.message || 'Start a new conversation'}
+                                            onClick={() => handleConversationClick(advert, conversation)}
+                                            isSelected={selectedConversation && selectedConversation.conversationId === conversation.conversationId}
+                                        />
+                                    ))
+                            ) : (
+                                <MessageHistoryCard
+                                    key={advert.advertId}
+                                    advertPhoto={advert.advertPhoto}
+                                    advertTitle={advert.advertTitle}
+                                    posterUsername={advert.username}
+                                    lastMessageSender="You"
+                                    lastMessage="Start a new conversation"
+                                    onClick={() => handleConversationClick(advert, null)}
+                                    isSelected={selectedAdvert && selectedAdvert.advertId === advert.advertId}
+                                />
+                            )}
+                        </div>
                     ))}
                 </section>
                 {selectedConversation && selectedAdvert && (
                     <section className="current-conversation">
                         <ChatBox
-                            childKey={selectedAdvert.advertId}
                             messages={selectedConversation.messages}
                             loggedInUsername={loggedInUsername}
                         />
