@@ -1,5 +1,12 @@
 @use "./breakpoints" as *;
 
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body,
 input {
     min-height: 2.25rem;

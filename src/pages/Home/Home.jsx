@@ -21,7 +21,8 @@ const Home = () => {
         }
 
         try {
-            const response = await axios.get(`http://localhost:8080/adverts/${userId}`, {
+            console.log('token: ', token.replaceAll('"', ''))
+            const response = await axios.get(`http://localhost:8080/adverts/others/${userId}`, {
                 headers: {
                     Authorization: `Bearer ${token.replaceAll('"', '')}`,
                 },

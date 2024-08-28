@@ -2,12 +2,15 @@
 
 .chat-box {
     display: flex;
+    flex-grow: 1;
+    justify-content: flex-end;
     flex-direction: column;
     padding: 10px;
     background-color: #f5f5f5;
     border-radius: 8px;
-    max-height: 400px;
     overflow-y: auto;
+    height: calc(100vh - 67.33px - 112px);
+    padding: 1rem;
 
     .message {
         display: flex;
