@@ -34,7 +34,6 @@ const App = () => {
             <Route path="/home" element={<ProtectedRoute token={token}><Home /></ProtectedRoute>} />
             <Route path="/messaging" element={<ProtectedRoute token={token}><Messaging /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute token={token}><Admin /></ProtectedRoute>} />
-            <Route path="/logout" element={<h1>Log out</h1>} />
           </Routes>
           <Footer />
         </>

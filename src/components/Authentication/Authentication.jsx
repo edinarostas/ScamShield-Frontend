@@ -18,7 +18,7 @@ const Authentication = ({ setToken }) => {
                 return;
             }
             try {
-                const response = await axios.post("http://localhost:8080/signup", {
+                const response = await axios.post("http://localhost:8080/auth/signup", {
                     username,
                     password
                 });
@@ -28,7 +28,7 @@ const Authentication = ({ setToken }) => {
             }
         } else {
             try {
-                const response = await axios.post("http://localhost:8080/login", {
+                const response = await axios.post("http://localhost:8080/auth/login", {
                     username,
                     password
                 });

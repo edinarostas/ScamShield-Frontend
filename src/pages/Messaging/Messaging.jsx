@@ -19,7 +19,7 @@ const Messaging = () => {
             const token = sessionStorage.getItem("token");
             if (token) {
                 try {
-                    const response = await axios.get('http://localhost:8080/username', {
+                    const response = await axios.get('http://localhost:8080/user/username', {
                         headers: { Authorization: `Bearer ${token.replaceAll('"', '')}` }
                     });
                     setLoggedInUsername(response.data.username);
@@ -32,70 +32,76 @@ const Messaging = () => {
         fetchUsername();
     }, []);
 
-    useEffect(() => {
-        const fetchConversationsAndAdverts = async () => {
-            const token = sessionStorage.getItem("token");
-            const userId = sessionStorage.getItem("userId");
+    const fetchConversationsAndAdverts = async () => {
+        const token = sessionStorage.getItem("token");
+        const userId = sessionStorage.getItem("userId");
 
-            if (!token || !userId) {
-                return;
-            }
+        if (!token || !userId) {
+            return;
+        }
 
-            try {
-                const response = await axios.get(`http://localhost:8080/messages/${userId}`, {
-                    headers: {
-                        Authorization: `Bearer ${token.replaceAll('"', '')}`,
-                    },
-                });
-                const fetchedAdverts = response.data.adverts;
-                setAdverts(fetchedAdverts);
+        try {
+            const response = await axios.get(`http://localhost:8080/messages/${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${token.replaceAll('"', '')}`,
+                },
+            });
+            const fetchedAdverts = response.data.adverts;
+            setAdverts(fetchedAdverts);
 
-                const queryParams = new URLSearchParams(location.search);
-                const advertId = queryParams.get('advertId');
+            const queryParams = new URLSearchParams(location.search);
+            const advertId = queryParams.get('advertId');
 
-                if (advertId) {
-                    let foundAdvert = fetchedAdverts.find(advert => advert.advertId === advertId);
+            if (advertId) {
+                let foundAdvert = fetchedAdverts.find(advert => advert.advertId === advertId);
 
-                    if (!foundAdvert) {
-                        try {
-                            const advertData = await axios.get(`http://localhost:8080/advert/${advertId}`, {
-                                headers: {
-                                    Authorization: `Bearer ${token.replaceAll('"', '')}`,
-                                },
-                            });
+                if (!foundAdvert) {
+                    try {
+                        const advertData = await axios.get(`http://localhost:8080/adverts/${advertId}`, {
+                            headers: {
+                                Authorization: `Bearer ${token.replaceAll('"', '')}`,
+                            },
+                        });
 
-                            foundAdvert = {
-                                advertId: advertData.data.advert.id,
-                                advertTitle: advertData.data.advert.title,
-                                advertPhoto: advertData.data.advert.photo,
-                                advertPrice: advertData.data.advert.price,
-                                username: advertData.data.advert.username,
-                                conversations: []
-                            };
+                        foundAdvert = {
+                            advertId: advertData.data.advert.id,
+                            advertTitle: advertData.data.advert.title,
+                            advertPhoto: advertData.data.advert.photo,
+                            advertPrice: advertData.data.advert.price,
+                            username: advertData.data.advert.username,
+                            conversations: []
+                        };
 
-                            setAdverts(prevAdverts => [...prevAdverts, foundAdvert]);
-                        } catch (error) {
-                            console.log("Error fetching advert: ", error);
-                        }
-                    }
-
-                    if (foundAdvert && foundAdvert.conversations.length > 0) {
-                        setSelectedAdvert(foundAdvert);
-                        setSelectedConversation(foundAdvert.conversations[0]);
-                    } else if (foundAdvert) {
-                        const newConversation = { conversationId: uuidv7(), messages: [] };
-                        foundAdvert.conversations.push(newConversation);
-                        setSelectedAdvert(foundAdvert);
-                        setSelectedConversation(newConversation);
+                        setAdverts(prevAdverts => [...prevAdverts, foundAdvert]);
+                    } catch (error) {
+                        console.log("Error fetching advert: ", error);
                     }
                 }
-            } catch (error) {
-                console.log("Error fetching conversations and adverts: ", error);
-            }
-        };
 
+                if (foundAdvert && foundAdvert.conversations.length > 0) {
+                    setSelectedAdvert(foundAdvert);
+                    setSelectedConversation(foundAdvert.conversations[0]);
+                } else if (foundAdvert) {
+                    const newConversation = { conversationId: uuidv7(), messages: [] };
+                    foundAdvert.conversations.push(newConversation);
+                    setSelectedAdvert(foundAdvert);
+                    setSelectedConversation(newConversation);
+                }
+            }
+        } catch (error) {
+            console.log("Error fetching conversations and adverts: ", error);
+        }
+    };
+
+    useEffect(() => {
         fetchConversationsAndAdverts();
     }, [location.search]);
+
+    useEffect(() => {
+        const intervalId = setInterval(fetchConversationsAndAdverts, 5000);
+
+        return () => clearInterval(intervalId);
+    }, [selectedConversation, location.search]);
 
     const handleConversationClick = (advert, conversation) => {
         setSelectedAdvert(advert);
