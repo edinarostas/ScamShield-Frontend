@@ -1,11 +1,17 @@
 # ScamShield Client
 ## Overview
 
-ScamShield is an advanced machine learning tool designed for messaging platforms. It detects potential scam messages and alerts users, helping them avoid scams and protecting their personal information.
+ScamShield is an advanced machine learning tool designed for messaging platforms, integrated within a mockup re-commerce storefront. This tool visually demonstrates how it detects potential scam messages, alerting users in real-time to protect them from scams and safeguarding their personal information. Additionally, ScamShield is being developed as an integratable tool, allowing it to be seamlessly integrated into existing websites.
 
 ## Problem
 
-Messaging platforms are often exploited by scammers who deceive users with fraudulent messages. There is a need for an automated system to identify these scams and warn users in real-time, enhancing user safety and trust.
+Messaging platforms, particularly in e-commerce settings, are frequently targeted by scammers who attempt to deceive users with fraudulent messages. There is a critical need for an automated system that can identify these scams and warn users as they interact on these platforms, thereby enhancing user safety, trust, and overall platform integrity.
+
+## Preview How the Tool Works on the Mockup Re-Commerce Website
+
+https://github.com/user-attachments/assets/fc68ef39-c8a5-436f-a1eb-4c76e4e6da92
+
+ScamShield is showcased within a mockup re-commerce website, where users can visually experience and interact with the tool. The website includes a fully implemented messaging system that integrates ScamShield, allowing users to see firsthand how scam detection and alerts are handled in a real-world scenario.
 
 ## Starting the App
 
